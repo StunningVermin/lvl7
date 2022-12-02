@@ -158,7 +158,7 @@ app.post(
         dueDate: request.body.dueDate,
         userId: request.user.id,
       });
-      return response.redirect("/todos"); // response.json(todo);
+      return response.redirect("/todos");
     } catch (error) {
       console.log(error);
       return response.status(422).json(error);
@@ -227,20 +227,16 @@ app.post("/users", async (request, response) => {
     request.flash("error", "Name can't be a null value");
     return response.redirect("/signup");
   }
-
-  // check if email is already registered
   const user = await User.findOne({ where: { email: request.body.email } });
   if (user) {
     request.flash("error", "A user with this email address already exist");
     return response.redirect("/signup");
   }
-
   if (request.body.password.length < 8) {
     request.flash("error", "Password should be atleast 8 characters");
     return response.redirect("/signup");
   }
-  // hasing the password
-  const hashpwd = await bcrypt.hash(request.body.password, saltRounds); // take time so add await
+  const hashpwd = await bcrypt.hash(request.body.password, saltRounds); 
   try {
     const user = await User.create({
       firstName: request.body.firstName,
